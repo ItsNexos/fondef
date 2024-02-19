@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:
+
+  - job_name: 'registros'
+    metrics_path: '/actuator/registros/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8086']
+        labels:
+          application: 'registros'
+
+  - job_name: 'ordenes'
+    metrics_path: '/actuator/ordenes/prometheus'
+    static_configs:
+      - targets: [ 'host.docker.internal:8086' ]
+        labels:
+          application: 'ordenes'
+
+  - job_name: 'seguimientoregistros'
+    metrics_path: '/actuator/seguimientoregistros/prometheus'
+    static_configs:
+      - targets: [ 'host.docker.internal:8086' ]
+        labels:
+          application: 'seguimientoregistros'

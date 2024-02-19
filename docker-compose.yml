@@ -1,0 +1,121 @@
+version: '3'
+services:
+
+  ### MYSQL database para registros
+  db-registros:
+    container_name: db-registros
+    image: mysql:8.0.36
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ms_registros
+      MYSQL_PASSWORD: dicomiohh1
+      MYSQL_ROOT_PASSWORD: dicomiohh1
+    ports:
+      - 3307:3306
+    expose:
+      - 3306
+
+  ### MYSQL database para ordenes
+  db-ordenes:
+    container_name: db-ordenes
+    image: mysql:8.0.36
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ms_ordenes
+      MYSQL_PASSWORD: dicomiohh1
+      MYSQL_ROOT_PASSWORD: dicomiohh1
+    ports:
+      - 3308:3306
+    expose:
+      - 3306
+
+  ### MYSQL database para seguimnientos
+  db-seguimientoreg:
+    container_name: db-seguimientoreg
+    image: mysql:8.0.36
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ms_seguimientoreg
+      MYSQL_PASSWORD: dicomiohh1
+      MYSQL_ROOT_PASSWORD: dicomiohh1
+    ports:
+      - 3309:3306
+    expose:
+      - 3306
+
+  ### MySQL database para Keycloak
+  db-keycloak:
+    container_name: db-keycloak
+    image: mysql:8.0.36
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ms_keycloak
+      MYSQL_PASSWORD: dicomiohh1
+      MYSQL_ROOT_PASSWORD: dicomiohh1
+    ports:
+      - "3305:3306"
+    expose:
+      - 3306
+
+  ###Keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    container_name: keycloak
+    command: ["start-dev"]
+    ports:
+      - 8181:8181
+    expose:
+      - 8181
+    depends_on:
+      - db-keycloak
+    environment:
+      DB_VENDOR: MySQL
+      DB_ADDR: db-keycloak
+      DB_DATABASE: ms_keycloak
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: dicomiohh1
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: 8181
+
+  ### Zipkin
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+
+  ### Prometheus
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.49.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./files/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  ### Zookeeper
+  zookeeper:
+      container_name: zookeeper
+      image: confluentinc/cp-zookeeper:7.6.0
+      environment:
+        ZOOKEEPER_CLIENT_PORT: 2181
+        ZOOKEEPER_TICK_TIME: 2000
+
+  ### Kafka
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:7.6.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
