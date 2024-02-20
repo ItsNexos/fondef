@@ -8,8 +8,8 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ms_registros
-      MYSQL_PASSWORD: dicomiohh1
-      MYSQL_ROOT_PASSWORD: dicomiohh1
+      MYSQL_PASSWORD: #####
+      MYSQL_ROOT_PASSWORD: #####
     ports:
       - 3307:3306
     expose:
@@ -22,8 +22,8 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ms_ordenes
-      MYSQL_PASSWORD: dicomiohh1
-      MYSQL_ROOT_PASSWORD: dicomiohh1
+      MYSQL_PASSWORD: #####
+      MYSQL_ROOT_PASSWORD: #####
     ports:
       - 3308:3306
     expose:
@@ -36,8 +36,8 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ms_seguimientoreg
-      MYSQL_PASSWORD: dicomiohh1
-      MYSQL_ROOT_PASSWORD: dicomiohh1
+      MYSQL_PASSWORD: #####
+      MYSQL_ROOT_PASSWORD: #####
     ports:
       - 3309:3306
     expose:
@@ -50,8 +50,8 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ms_keycloak
-      MYSQL_PASSWORD: dicomiohh1
-      MYSQL_ROOT_PASSWORD: dicomiohh1
+      MYSQL_PASSWORD: #####
+      MYSQL_ROOT_PASSWORD: #####
     ports:
       - "3305:3306"
     expose:
@@ -74,7 +74,7 @@ services:
       DB_DATABASE: ms_keycloak
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: dicomiohh1
+      DB_PASSWORD: #####
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_PORT: 8181
